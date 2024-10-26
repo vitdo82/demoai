@@ -1,0 +1,92 @@
+services:
+  ollama-llm:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - 11434:11434
+
+  prepare-models:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama-llm
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=http://ollama-llm:11434
+#    networks:
+#      - app-network
+    entrypoint: >
+      sh -c "
+        echo 'Waiting for Ollama server to start...' &&
+        sleep 10 &&
+        echo 'Pulling tinydolphin...' &&
+        ollama pull tinydolphin &&
+        echo 'Pulling tinyllama...' &&
+        ollama pull tinyllama &&
+        echo 'Pulling llama3.1...' &&
+        ollama pull llama3.1 &&
+        echo 'Pulling embedding model...' &&
+        ollama pull mxbai-embed-large &&
+        echo 'Model preparation complete.'"
+
+  pgvector:
+#    image: pgvector/pgvector:pg17
+    image: ankane/pgvector:latest
+    environment:
+      - POSTGRES_DB=demoaidb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    labels:
+      - "org.springframework.boot.service-connection=postgres"
+    ports:
+      - 5432:5432
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+#  db:
+#    image: ankane/pgvector:latest
+#    environment:
+#      - POSTGRES_DB=ragdb
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=password
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+#    networks:
+#      - app-network
+
+#  backend:
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ragdb
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=password
+#      - SPRING_AI_OLLAMA_BASE_URL=http://ollama-llm:11434/
+#      - SPRING_AI_OLLAMA_CHAT_OPTIONS_MODEL=tinydolphin
+#      - SPRING_AI_OLLAMA_CHAT_OPTIONS_ALTERNATIVE_MODEL=tinyllama
+#      - SPRING_AI_OLLAMA_CHAT_OPTIONS_ALTERNATIVE_SECOND_MODEL=llama3.1
+#      - SPRING_AI_OLLAMA_EMBEDDING_OPTIONS_MODEL=mxbai-embed-large
+#      - SPRING_AI_VECTORSTORE_PGVECTOR_REMOVE_EXISTING_VECTOR_STORE_TABLE=true
+#      - SPRING_AI_VECTORSTORE_PGVECTOR_INDEX_TYPE=HNSW
+#      - SPRING_AI_VECTORSTORE_PGVECTOR_DISTANCE_TYPE=COSINE_DISTANCE
+#      - SPRING_AI_VECTORSTORE_PGVECTOR_DIMENSIONS=1024
+#    depends_on:
+#      - prepare-models
+#      - db
+#    volumes:
+#      - ollama_data:/root/.ollama
+#    networks:
+#      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgvector_data:
+  postgres_data:
+  ollama_data:

@@ -1,1 +1,1 @@
-# demoai
+# Spring AI demo
