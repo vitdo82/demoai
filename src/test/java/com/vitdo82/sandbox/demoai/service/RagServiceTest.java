@@ -1,5 +1,6 @@
 package com.vitdo82.sandbox.demoai.service;
 
+import com.vitdo82.sandbox.demoai.TestcontainersConfiguration;
 import com.vitdo82.sandbox.demoai.processor.PdfDocumentProcessor;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
+@Import(TestcontainersConfiguration.class)
 @SpringBootTest
 class RagServiceTest {
 
