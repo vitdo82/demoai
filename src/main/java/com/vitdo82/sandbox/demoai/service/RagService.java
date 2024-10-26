@@ -2,6 +2,7 @@ package com.vitdo82.sandbox.demoai.service;
 
 import com.vitdo82.sandbox.demoai.model.VectorStoreEntity;
 import com.vitdo82.sandbox.demoai.model.VectorStoreRepository;
+import com.vitdo82.sandbox.demoai.processor.DocumentProcessor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class RagService {
     private ChatModel chatModel;
     private VectorStore vectorStore;
 
-//    private final Map<String, DocumentProcessor> documentProcessors;
+    private final Map<String, DocumentProcessor> documentProcessors;
 
     @Getter
     private final Set<String> uploadedFileName = new HashSet<>();
@@ -41,9 +42,13 @@ public class RagService {
 
     public void processFiles(List<MultipartFile> multipartFiles) {
         for(MultipartFile file: multipartFiles) {
-//            var extension = file.getOriginalFilename().split("\\.")[1];
-//            DocumentProcessor documentProcessor = documentProcessors.get(extension);
-//            documentProcessor.processDocument(file);
+            String fileType = determineFileType(file);
+            DocumentProcessor documentProcessor = documentProcessors.get(fileType);
+            if (documentProcessor == null) {
+                throw new IllegalArgumentException("No processor found for file type: " + fileType);
+            }
+
+            documentProcessor.processDocument(file.getResource());
             uploadedFileName.add(file.getOriginalFilename());
         }
     }
@@ -59,5 +64,12 @@ public class RagService {
         String prompt = "Context: " + context + "\n\nQuestion: " + question + "\n\nAnswer:";
         log.debug("The prompt is {}", prompt);
         return chatModel.stream(new Prompt(prompt));
+    }
+
+    private String determineFileType(MultipartFile multipartFile) {
+        if ("application/pdf".equals(multipartFile.getContentType())) {
+            return "pdfDocumentProcessor";
+        }
+        return "";
     }
 }
