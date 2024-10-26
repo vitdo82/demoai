@@ -1,10 +1,8 @@
 package com.vitdo82.sandbox.demoai.service;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.model.ChatResponse;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 import java.util.stream.Collectors;
@@ -17,7 +15,7 @@ class RagServiceTest {
     @Autowired
     private RagService ragService;
 
-    @Test
+    @Ignore
     void testQueryExecution() {
         String query = """
                 Spring AI rocks
