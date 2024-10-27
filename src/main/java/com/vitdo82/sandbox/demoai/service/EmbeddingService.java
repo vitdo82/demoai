@@ -23,27 +23,23 @@ public class EmbeddingService {
     private VectorStoreRepository vectorStoreRepository;
     private DocumentRepository documentRepository;
 
-    @Qualifier("ollamaEmbeddingModel")
     private EmbeddingModel embeddingModel;
 
     public void generateAndStoreEmbedding(String input, String originalFileName) {
-        DocumentEntity document = DocumentEntity.builder()
-                .documentName(originalFileName)
-                .metadata(Map.of("category", "PUBLIC"))
-                .build();
-        DocumentEntity savedDocument = documentRepository.save(document);
+        DocumentEntity document = documentRepository.findByDocumentName(originalFileName)
+                .orElseGet(() -> documentRepository.save(DocumentEntity.builder()
+                        .documentName(originalFileName)
+                        .metadata(Map.of("category", "PUBLIC"))
+                        .build()));
 
         vectorStoreRepository.saveAll(List.of(
                 VectorStoreEntity.builder()
-                        .id(savedDocument.getId())
+                        .document(document)
                         .content(input)
-                        .embedding(
-                                embeddingModel.embed(List.of(input)).stream().mapToDouble(Double.class::cast).toArray()
-                        )
+                        .embedding(embeddingModel.embed(input))
                         .metadata(document.getMetadata())
                         .build()
         ));
-
         log.info("Stored embedding for input: {}", input);
     }
 }

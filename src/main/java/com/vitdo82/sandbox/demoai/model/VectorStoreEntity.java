@@ -26,7 +26,7 @@ public class VectorStoreEntity {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "document_id", nullable = false)
+    @JoinColumn(name = "document_id", nullable = true)
     private DocumentEntity document;
 
     @Column(name = "content")
@@ -37,7 +37,7 @@ public class VectorStoreEntity {
     private Map<String, Object> metadata;
 
     @Column(name = "embedding", columnDefinition = "vector(1024)")
-    private double[] embedding;
+    private float[] embedding;
 
     @Column(name = "chunk_index")
     private Integer chunkIndex;

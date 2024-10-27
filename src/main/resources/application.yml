@@ -29,6 +29,11 @@ spring:
         distance-type: cosine_distance
         dimensions: 1024
         remove-existing-vector-store-table: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 logging:
   level:
     root: INFO
+    org.springframework.ai.vectorstore: INFO

@@ -1,8 +1,8 @@
 package com.vitdo82.sandbox.demoai.processor;
 
 import com.vitdo82.sandbox.demoai.TestcontainersConfiguration;
+import com.vitdo82.sandbox.demoai.service.EmbeddingService;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 class PdfDocumentProcessorTest {
 
     @MockBean
-    private VectorStore vectorStore;
+    private EmbeddingService embeddingService;
 
     @Autowired
     private PdfDocumentProcessor documentProcessor;
@@ -29,6 +29,6 @@ class PdfDocumentProcessorTest {
     void shouldProcessDocumentWhenGivenValidResource() {
         documentProcessor.processDocument(resource);
 
-        verify(vectorStore).accept(anyList());
+        verify(embeddingService).generateAndStoreEmbedding(anyString(), eq(resource.getFilename()));
     }
 }

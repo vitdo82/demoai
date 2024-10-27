@@ -54,9 +54,14 @@ public class RagService {
     }
 
     public Flux<ChatResponse> query(String question) {
-        List<Document> similarDocuments = vectorStore.similaritySearch(SearchRequest.query(question).withTopK(5).withFilterExpression(new Filter.Expression(
-                Filter.ExpressionType.EQ, new Filter.Key("category"), new Filter.Value("PUBLIC")
-        )));
+        List<Document> similarDocuments = vectorStore.similaritySearch(
+            SearchRequest
+                .query(question)
+                .withTopK(5)
+                .withFilterExpression(new Filter.Expression(
+                    Filter.ExpressionType.EQ, new Filter.Key("category"), new Filter.Value("PUBLIC")
+                ))
+        );
 
         log.debug("Retrieved {}  similar docs.", similarDocuments.size());
         String context = similarDocuments.stream().map(Document::getContent).collect(Collectors.joining("\n"));
