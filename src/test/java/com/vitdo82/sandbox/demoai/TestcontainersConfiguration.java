@@ -12,20 +12,12 @@ public class TestcontainersConfiguration {
 //    @Bean
 //    @ServiceConnection
 //    OllamaContainer ollamaContainer() {
-//        return new OllamaContainer(DockerImageName.parse("ollama/ollama:latest"));
+//        return new OllamaContainer(DockerImageName.parse("ollama/ollama:0.3.14"));
 //    }
 
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> pgvectorContainer() {
-//        return new PostgreSQLContainer<>(DockerImageName.parse("pgvector/pgvector:pg16"));
-        return new PostgreSQLContainer<>(DockerImageName.parse("ankane/pgvector:latest")
-                .asCompatibleSubstituteFor("postgres"));
+        return new PostgreSQLContainer<>(DockerImageName.parse("pgvector/pgvector:pg17"));
     }
-
-//    @Bean
-//    @ServiceConnection
-//    PostgreSQLContainer<?> postgresContainer() {
-//        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
-//    }
 }

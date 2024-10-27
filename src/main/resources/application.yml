@@ -2,15 +2,14 @@ spring:
   application:
     name: demo-ai
   flyway:
-    enabled: false
+    enabled: true
     baseline-on-migrate: true
     locations:
       - classpath:db/migration
       - classpath:db/callback
-    url: jdbc:postgresql://localhost:5432/demoaidb
-    user: postgres
-    password: postgres
-
+  jpa:
+    hibernate:
+      ddl-auto: none
   datasource:
     url: jdbc:postgresql://localhost:5432/demoaidb
     username: postgres
@@ -30,7 +29,6 @@ spring:
         distance-type: cosine_distance
         dimensions: 1024
         remove-existing-vector-store-table: true
-
 logging:
   level:
     root: INFO
