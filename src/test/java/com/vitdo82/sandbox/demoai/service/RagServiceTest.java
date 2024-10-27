@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest
@@ -39,8 +39,8 @@ class RagServiceTest {
     @Ignore
     void testQueryExecution() {
         String query = """
-                Spring AI rocks
-                """;
+            Spring AI rocks
+            """;
 
         String result = ragService.query(query)
             .timeout(Duration.ofSeconds(10))

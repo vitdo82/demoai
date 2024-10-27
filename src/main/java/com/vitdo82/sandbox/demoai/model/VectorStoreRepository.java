@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface VectorStoreRepository  extends JpaRepository<VectorStoreEntity, UUID> {
+public interface VectorStoreRepository extends JpaRepository<VectorStoreEntity, UUID> {
 
     List<VectorStoreEntity> findVectorStoreEntitiesByDocument_DocumentName(String name);
 }

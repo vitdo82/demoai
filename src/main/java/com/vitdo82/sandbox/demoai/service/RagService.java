@@ -18,7 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -41,7 +44,7 @@ public class RagService {
     }
 
     public void processFiles(List<MultipartFile> multipartFiles) {
-        for(MultipartFile file: multipartFiles) {
+        for (MultipartFile file : multipartFiles) {
             String fileType = determineFileType(file);
             DocumentProcessor documentProcessor = documentProcessors.get(fileType);
             if (documentProcessor == null) {

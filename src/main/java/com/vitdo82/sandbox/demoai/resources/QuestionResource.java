@@ -9,7 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,10 +27,10 @@ public class QuestionResource {
         Flux<ChatResponse> chatResponse = ragService.query(message.orElseThrow(() -> new Exception("The message is required")));
 
         String result = chatResponse
-                .timeout(Duration.ofSeconds(30))
-                .map(response -> response.getResult().getOutput().getContent())
-                .collect(Collectors.joining())
-                .block();
+            .timeout(Duration.ofSeconds(30))
+            .map(response -> response.getResult().getOutput().getContent())
+            .collect(Collectors.joining())
+            .block();
 
         return ResponseEntity.ok(result);
     }

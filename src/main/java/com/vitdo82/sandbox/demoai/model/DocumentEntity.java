@@ -3,10 +3,8 @@ package com.vitdo82.sandbox.demoai.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.Instant;
 import java.util.Map;

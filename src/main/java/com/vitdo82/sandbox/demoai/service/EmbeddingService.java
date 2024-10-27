@@ -7,7 +7,6 @@ import com.vitdo82.sandbox.demoai.model.VectorStoreRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -27,18 +26,18 @@ public class EmbeddingService {
 
     public void generateAndStoreEmbedding(String input, String originalFileName) {
         DocumentEntity document = documentRepository.findByDocumentName(originalFileName)
-                .orElseGet(() -> documentRepository.save(DocumentEntity.builder()
-                        .documentName(originalFileName)
-                        .metadata(Map.of("category", "PUBLIC"))
-                        .build()));
+            .orElseGet(() -> documentRepository.save(DocumentEntity.builder()
+                .documentName(originalFileName)
+                .metadata(Map.of("category", "PUBLIC"))
+                .build()));
 
         vectorStoreRepository.saveAll(List.of(
-                VectorStoreEntity.builder()
-                        .document(document)
-                        .content(input)
-                        .embedding(embeddingModel.embed(input))
-                        .metadata(document.getMetadata())
-                        .build()
+            VectorStoreEntity.builder()
+                .document(document)
+                .content(input)
+                .embedding(embeddingModel.embed(input))
+                .metadata(document.getMetadata())
+                .build()
         ));
         log.info("Stored embedding for input: {}", input);
     }
