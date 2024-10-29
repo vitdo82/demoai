@@ -23,8 +23,8 @@ public class QuestionResource {
     private final RagService ragService;
 
     @PostMapping(value = "/chat")
-    public ResponseEntity<String> question(@RequestBody Optional<String> message) throws Exception {
-        Flux<ChatResponse> chatResponse = ragService.query(message.orElseThrow(() -> new Exception("The message is required")));
+    public ResponseEntity<Message> question(@RequestBody Optional<Message> message) throws Exception {
+        Flux<ChatResponse> chatResponse = ragService.query(message.orElseThrow(() -> new Exception("The message is required")).message());
 
         String result = chatResponse
             .timeout(Duration.ofSeconds(30))
@@ -32,7 +32,7 @@ public class QuestionResource {
             .collect(Collectors.joining())
             .block();
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(new Message(result));
     }
 
     @PostMapping(value = "/upload")
@@ -41,7 +41,7 @@ public class QuestionResource {
         return ResponseEntity.ok("Finish file upload");
     }
 
-    @GetMapping(value = "/document")
+    @GetMapping(value = "/documents")
     public ResponseEntity<Collection<String>> question() {
         Set<String> documents = ragService.getUploadedFileName();
         return ResponseEntity.ok(documents);

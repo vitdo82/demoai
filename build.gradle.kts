@@ -1,7 +1,10 @@
+import com.github.gradle.node.npm.task.NpmTask
+
 plugins {
     java
     id("org.springframework.boot") version "3.3.5"
     id("io.spring.dependency-management") version "1.1.6"
+    id("com.github.node-gradle.node") version "7.1.0"
 }
 
 group = "com.vitdo82.sandbox"
@@ -11,6 +14,12 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+node {
+    version = "20.18.0"
+    npmVersion = "10.8.2"
+    download = true
 }
 
 configurations {
@@ -58,4 +67,22 @@ dependencyManagement {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.register<NpmTask>("installFrontendDependencies") {
+    group = "build"
+    description = "Install frontend dependencies using npm"
+    workingDir.set(file("src/main/client"))
+    args.set(listOf("install"))
+}
+
+tasks.register<NpmTask>("buildAndIncludeFrontend") {
+    group = "build"
+    description = "Build frontend using npm and include it in the main build"
+    workingDir = file("src/main/client")
+    args.set(listOf("run", "build"))
+}
+
+tasks.named("processResources") {
+    dependsOn("installFrontendDependencies", "buildAndIncludeFrontend")
 }
