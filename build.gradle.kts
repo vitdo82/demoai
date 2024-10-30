@@ -77,6 +77,7 @@ tasks.register<NpmTask>("installFrontendDependencies") {
 }
 
 tasks.register<NpmTask>("buildAndIncludeFrontend") {
+    dependsOn("installFrontendDependencies")
     group = "build"
     description = "Build frontend using npm and include it in the main build"
     workingDir = file("src/main/client")
@@ -84,5 +85,5 @@ tasks.register<NpmTask>("buildAndIncludeFrontend") {
 }
 
 tasks.named("processResources") {
-    dependsOn("installFrontendDependencies", "buildAndIncludeFrontend")
+    dependsOn("buildAndIncludeFrontend")
 }
