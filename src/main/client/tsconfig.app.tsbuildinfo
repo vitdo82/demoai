@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/env.ts","./src/main.tsx","./src/vite-env.d.ts","./src/components/chat.tsx","./src/components/chatform.tsx","./src/components/singlefileuploader.tsx"],"version":"5.6.3"}
+{"root":["./src/app.tsx","./src/env.ts","./src/main.tsx","./src/vite-env.d.ts","./src/components/chat.tsx","./src/components/singlefileuploader.tsx"],"version":"5.6.3"}
