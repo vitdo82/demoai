@@ -17,8 +17,8 @@ java {
 }
 
 node {
-    version = "20.18.0"
-    npmVersion = "10.8.2"
+    version = "22.11.0"
+    npmVersion = "10.9.0"
     download = true
 }
 
@@ -86,4 +86,12 @@ tasks.register<NpmTask>("buildAndIncludeFrontend") {
 
 tasks.named("processResources") {
     dependsOn("buildAndIncludeFrontend")
+}
+
+tasks.register<NpmTask>("webRun") {
+    dependsOn("installFrontendDependencies")
+    group = "application"
+    description = "Run frontend"
+    workingDir = file("src/main/client")
+    args.set(listOf("run", "dev"))
 }
